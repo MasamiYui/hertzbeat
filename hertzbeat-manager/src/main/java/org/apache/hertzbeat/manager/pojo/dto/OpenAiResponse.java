@@ -17,7 +17,6 @@
 
 package org.apache.hertzbeat.manager.pojo.dto;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hertzbeat.common.util.JsonUtil;
 import org.springframework.http.codec.ServerSentEvent;
 
 /**
@@ -96,7 +96,7 @@ public class OpenAiResponse {
 
     public static ServerSentEvent<String> convertToResponse(String aiRes) {
         try {
-            OpenAiResponse openAiResponse = JSON.parseObject(aiRes, OpenAiResponse.class);
+            OpenAiResponse openAiResponse = JsonUtil.fromJson(aiRes, OpenAiResponse.class);
             if (Objects.nonNull(openAiResponse)) {
                 OpenAiResponse.Choice choice = openAiResponse.getChoices().get(0);
                 String content = choice.getDelta().getContent();

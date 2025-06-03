@@ -17,7 +17,6 @@
 
 package org.apache.hertzbeat.collector.collect.rocketmq;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import java.util.ArrayList;
@@ -45,6 +44,7 @@ import org.apache.hertzbeat.common.entity.job.Metrics;
 import org.apache.hertzbeat.common.entity.job.protocol.RocketmqProtocol;
 import org.apache.hertzbeat.common.entity.message.CollectRep;
 import org.apache.hertzbeat.common.util.CommonUtil;
+import org.apache.hertzbeat.common.util.JsonUtil;
 import org.apache.rocketmq.acl.common.AclClientRPCHook;
 import org.apache.rocketmq.acl.common.SessionCredentials;
 import org.apache.rocketmq.common.MixAll;
@@ -160,7 +160,10 @@ public class RocketmqSingleCollectImpl extends AbstractCollect implements Dispos
         if (StringUtils.isNotBlank(rocketmqProtocol.getAccessKey()) && StringUtils.isNotBlank(rocketmqProtocol.getSecretKey())) {
             rpcHook = new AclClientRPCHook(new SessionCredentials(rocketmqProtocol.getAccessKey(), rocketmqProtocol.getSecretKey()));
         }
-        DefaultMQAdminExt mqAdminExt = new DefaultMQAdminExt(rpcHook, 5000L);
+        // 修复：移除timeout参数，使用RocketMQ 5.x兼容的构造函数
+        DefaultMQAdminExt mqAdminExt = new DefaultMQAdminExt(rpcHook);
+        // 如果需要设置超时时间，使用setter方法
+        mqAdminExt.setTimeoutMillis(5000L);
         mqAdminExt.setNamesrvAddr(rocketmqProtocol.getNamesrvHost() + ":" + rocketmqProtocol.getNamesrvPort());
         mqAdminExt.setInstanceName("admin-" + System.currentTimeMillis());
         return mqAdminExt;
@@ -353,7 +356,7 @@ public class RocketmqSingleCollectImpl extends AbstractCollect implements Dispos
      * @param parseScript         JSON base path
      */
     private void fillBuilder(RocketmqCollectData rocketmqCollectData, CollectRep.MetricsData.Builder builder, List<String> aliasFields, String parseScript) {
-        String dataJson = JSONObject.toJSONString(rocketmqCollectData);
+        String dataJson = JsonUtil.toJson(rocketmqCollectData);
         List<Object> results = JsonPathParser.parseContentWithJsonPath(dataJson, parseScript);
         for (int i = 0; i < results.size(); i++) {
             CollectRep.ValueRow.Builder valueRowBuilder = CollectRep.ValueRow.newBuilder();
