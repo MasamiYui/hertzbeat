@@ -160,10 +160,7 @@ public class RocketmqSingleCollectImpl extends AbstractCollect implements Dispos
         if (StringUtils.isNotBlank(rocketmqProtocol.getAccessKey()) && StringUtils.isNotBlank(rocketmqProtocol.getSecretKey())) {
             rpcHook = new AclClientRPCHook(new SessionCredentials(rocketmqProtocol.getAccessKey(), rocketmqProtocol.getSecretKey()));
         }
-        // 修复：移除timeout参数，使用RocketMQ 5.x兼容的构造函数
-        DefaultMQAdminExt mqAdminExt = new DefaultMQAdminExt(rpcHook);
-        // 如果需要设置超时时间，使用setter方法
-        mqAdminExt.setTimeoutMillis(5000L);
+        DefaultMQAdminExt mqAdminExt = new DefaultMQAdminExt(rpcHook, 5000L);
         mqAdminExt.setNamesrvAddr(rocketmqProtocol.getNamesrvHost() + ":" + rocketmqProtocol.getNamesrvPort());
         mqAdminExt.setInstanceName("admin-" + System.currentTimeMillis());
         return mqAdminExt;
