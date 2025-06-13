@@ -1,7 +1,7 @@
 ---
 id: alert_template
-title: Message Notification Template
-sidebar_label: Alert Message Template
+title: Alert Notification Template
+sidebar_label: Alert Notification Template
 keywords: [Template, Alert Template, Notification Template, Message Notification, Alert Webhook Callback Notification]
 ---
 
