@@ -1,7 +1,7 @@
 ---
 id: alert_template
 title: Message Notification Template
-sidebar_label: Message Template
+sidebar_label: Alert Message Template
 keywords: [Template, Alert Template, Notification Template, Message Notification, Alert Webhook Callback Notification]
 ---
 
@@ -9,7 +9,7 @@ keywords: [Template, Alert Template, Notification Template, Message Notification
 
 ## Template Configuration
 
-【Notification】->【Notice Templates】->【Template Configuration】
+【Notification】->【Notice Template】->【Template Configuration】
 
 ![Template Configuration](/img/docs/help/alert-template-1-en.png)
 
@@ -31,7 +31,7 @@ HertzBeat notification templates are based on FreeMarker syntax, supporting vari
 - `commonAnnotations`：Common annotations (Map)
 - `alertFingerprints`：List of alert fingerprints
 - `creator`、`modifier`、`gmtCreate`、`gmtUpdate`：Metadata
-- `alerts`：List of alert details (List<SingleAlert>)
+- `alerts`：List of alert details （`List<SingleAlert>`）
 
 ### SingleAlert Structure Fields
 
